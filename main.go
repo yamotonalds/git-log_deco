@@ -52,6 +52,8 @@ func main() {
 	for {
                 rawLine, _, err := input.ReadLine()
                 line := string(rawLine)
+
+		// 空行はメッセージの開始または終了
 		if line == "" {
 			if len(messageLines) == 0 {
 				isMessageLine = true
