@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"flag"
 	"os/exec"
 	"log"
 	"bufio"
@@ -34,11 +33,7 @@ func (d *SdDecorator) Decorate(message string) string {
 }
 
 func main() {
-	flag.Parse()
-
-	args := []string{"log"}
-	args = append(args, flag.Args()...)
-	logCmd := exec.Command("git", args...)
+	logCmd := exec.Command("git", "log")
 	rawOutput, err := logCmd.StdoutPipe()
 	if err != nil {
 		log.Fatal(err)
