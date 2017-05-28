@@ -33,14 +33,14 @@ func (d *SdDecorator) Decorate(message string) string {
 }
 
 func main() {
-	logCmd := exec.Command("git", "log")
-	rawOutput, err := logCmd.StdoutPipe()
+	cmd := exec.Command("git", "log")
+	rawOutput, err := cmd.StdoutPipe()
 	if err != nil {
 		log.Fatal(err)
 	}
 	output := bufio.NewReader(rawOutput)
 
-	if err := logCmd.Start(); err != nil {
+	if err := cmd.Start(); err != nil {
 		log.Fatal(err)
 	}
 
