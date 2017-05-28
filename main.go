@@ -10,6 +10,29 @@ import (
 	"strings"
 )
 
+type Decorator interface {
+	Decorate(message string) string
+}
+
+type SandwichDecorator struct {
+	separator string
+}
+
+func (d *SandwichDecorator) Decorate(message string) string {
+	return strings.Join([]string{d.separator, message, d.separator}, "\n")
+}
+
+type SdDecorator struct {
+}
+
+func (d *SdDecorator) Decorate(message string) string {
+	decorated, err := exec.Command("echo-sd", message).CombinedOutput()
+	if err != nil {
+		log.Fatal(err)
+	}
+	return string(decorated)
+}
+
 func main() {
 	flag.Parse()
 
@@ -26,6 +49,8 @@ func main() {
 		log.Fatal(err)
 	}
 
+	var decorator Decorator = &SdDecorator{}
+	//var decorator Decorator = &SandwichDecorator{separator: "-----------------------"}
 	message := []string{}
 	isMessageLine := false
 	for {
@@ -37,11 +62,7 @@ func main() {
 				fmt.Println("")
 			} else {
 				isMessageLine = false
-				decorated, cmdErr := exec.Command("echo-sd", strings.Join(message, "\n")).CombinedOutput()
-				if cmdErr != nil {
-					log.Fatal(cmdErr)
-				}
-				fmt.Println(string(decorated))
+				fmt.Println(decorator.Decorate(strings.Join(message, "\n")))
 				message = []string{}
 			}		
 		} else {
