@@ -21,11 +21,12 @@ func (d *SandwichDecorator) Decorate(message string) string {
 	return strings.Join([]string{d.separator, message, d.separator}, "\n")
 }
 
-type SdDecorator struct {
+type CommandDecorator struct {
+	command string
 }
 
-func (d *SdDecorator) Decorate(message string) string {
-	decorated, err := exec.Command("echo-sd", message).CombinedOutput()
+func (d *CommandDecorator) Decorate(message string) string {
+	decorated, err := exec.Command(d.command, message).CombinedOutput()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -44,7 +45,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	var decorator Decorator = &SdDecorator{}
+	var decorator Decorator = &CommandDecorator{command: "echo-sd"}
 	//var decorator Decorator = &SandwichDecorator{separator: "-----------------------"}
 	message := []string{}
 	isMessageLine := false
