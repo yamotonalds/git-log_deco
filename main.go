@@ -35,11 +35,11 @@ func (d *CommandDecorator) Decorate(message string) string {
 
 func main() {
 	cmd := exec.Command("git", "log")
-	rawOutput, err := cmd.StdoutPipe()
+	rawInput, err := cmd.StdoutPipe()
 	if err != nil {
 		log.Fatal(err)
 	}
-	output := bufio.NewReader(rawOutput)
+	input := bufio.NewReader(rawInput)
 
 	if err := cmd.Start(); err != nil {
 		log.Fatal(err)
@@ -50,7 +50,7 @@ func main() {
 	messageLines := []string{}
 	isMessageLine := false
 	for {
-                rawLine, _, err := output.ReadLine()
+                rawLine, _, err := input.ReadLine()
                 line := string(rawLine)
 		if line == "" {
 			if len(messageLines) == 0 {
