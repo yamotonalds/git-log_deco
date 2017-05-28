@@ -47,23 +47,23 @@ func main() {
 
 	var decorator Decorator = &CommandDecorator{command: "echo-sd"}
 	//var decorator Decorator = &SandwichDecorator{separator: "-----------------------"}
-	message := []string{}
+	messageLines := []string{}
 	isMessageLine := false
 	for {
                 rawLine, _, err := output.ReadLine()
                 line := string(rawLine)
 		if line == "" {
-			if len(message) == 0 {
+			if len(messageLines) == 0 {
 				isMessageLine = true
 				fmt.Println("")
 			} else {
 				isMessageLine = false
-				fmt.Println(decorator.Decorate(strings.Join(message, "\n")))
-				message = []string{}
+				fmt.Println(decorator.Decorate(strings.Join(messageLines, "\n")))
+				messageLines = []string{}
 			}		
 		} else {
 			if isMessageLine {
-				message = append(message, strings.TrimSpace(line))
+				messageLines = append(messageLines, strings.TrimSpace(line))
 			} else {
 				fmt.Println(line)
 			}
